@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import App from './App';
 import ReactDOM from 'react-dom';
 import PrismDecorator from 'draft-js-prism';
 import {
