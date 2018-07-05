@@ -3,18 +3,31 @@ body {
 }
 
 .RichEditor-root {
-  /* background: #fff; */
+  /* ---------For Editing Layout---------- */
+  border: 2px solid blue;
+  /* ------------------------------------- */
+  /* backg
+  round: #fff; */
   /* border: 1px solid #ddd; */
-  /* font-family: 'Georgia', serif; */
+  font-family: 'Georgia', serif;
   /* font-size: 14px; */
   /* padding: 15px; */
 }
 
 .RichEditor-editor {
   /* border-top: 1px solid #ddd; */
+  /* margin-top: 10px; */
+  /* ------------------------------------------------------ */
+  /* ---------For Editing Layout---------- */
+  border: 2px solid red;
+  /* ------------------------------------- */
   cursor: text;
   font-size: 16px;
-  /* margin-top: 10px; */
+  background-color: #f9f9f9;
+  /* font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace; */
+  /* font-size: 16px; */
+  /* padding: 20px; */
+  margin: 0;
 }
 
 .RichEditor-editor .public-DraftEditorPlaceholder-root,
@@ -28,25 +41,26 @@ body {
 }
 
 .RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
-  /* display: none; */
+  display: none;
 }
 
 .RichEditor-editor .RichEditor-blockquote {
-  border-left: 5px solid #eee;
-  color: #666;
-  font-family: 'Hoefler Text', 'Georgia', serif;
-  font-style: italic;
   /* margin: 16px 0; */
   /* padding: 10px 20px; */
+  /* border-left: 5px solid #eee;
+  color: #666;
+  font-family: 'Hoefler Text', 'Georgia', serif;
+  font-style: italic; */
 }
 
 /* ----------------- Main Editor Styling ---------------- */
 
 .RichEditor-editor .public-DraftStyleDefault-pre {
   /* background-color: rgba(0, 0, 0, 0.05); */
-  background-color: #f9f9f9;
+  /* --------------------------------------------------------------- */
+  /* background-color: #f9f9f9;
   font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
   font-size: 16px;
   padding: 20px;
-  margin: 0;
+  margin: 0; */
 }
