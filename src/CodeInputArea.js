@@ -10,6 +10,21 @@ import Draft, {
 import PrismDraftDecorator from 'draft-js-prism';
 import CodeUtils from 'draft-js-code';
 
+var decorator = new PrismDraftDecorator();
+var contentState = convertFromRaw({
+  entityMap: {},
+  blocks: [
+    {
+      type: 'code-block',
+      text: ''
+    }
+  ]
+});
+
+// Javascript ^^^^^^^^^^^^^^
+// -------------------------
+// Styled Components vvvvvvv
+
 const Wrapper = styled.div`
   overflow-x: auto;
   border: ${props => (props.error ? '1px solid red' : '1px solid #c9c9c9')};
@@ -27,48 +42,28 @@ const Info = styled.small`
   opacity: 0.8;
 `;
 
-class PrismEditorExample extends Component {
-  constructor(props) {
-    super(props);
+class CodeInputArea extends Component {
+  state = {
+    editorState: EditorState.createWithContent(contentState, decorator)
+  };
 
-    var decorator = new PrismDraftDecorator();
-    var contentState = convertFromRaw({
-      entityMap: {},
-      blocks: [
-        {
-          type: 'code-block',
-          text: ''
-        }
-      ]
-    });
+  focus = () => this.refs.editor.focus();
 
-    this.state = {
-      editorState: EditorState.createWithContent(contentState, decorator)
-    };
+  onChange = editorState => {
+    // Send editor contents to codeValue prop
+    const contentState = editorState.getCurrentContent();
+    const allContent = convertToRaw(contentState)
+      .blocks.map(block => block.text)
+      .join('\n');
 
-    this.focus = () => this.refs.editor.focus();
-    this.onChange = editorState => {
-      // Send editor contents to codeValue prop
-      const contentState = editorState.getCurrentContent();
-      const allContent = convertToRaw(contentState)
-        .blocks.map(block => block.text)
-        .join('\n');
-      this.props.codeValue(allContent);
-      // const stringContent = convertToRaw(contentState).blocks[0].text;
-      // this.props.codeValue(stringContent);
+    this.props.codeValue(allContent);
+    // const stringContent = convertToRaw(contentState).blocks[0].text;
+    // this.props.codeValue(stringContent);
 
-      this.setState({ editorState });
-    };
+    this.setState({ editorState });
+  };
 
-    this.handleKeyCommand = command => this._handleKeyCommand(command);
-    this.keyBindingFn = e => this._keyBindingFn(e);
-    this.toggleBlockType = type => this._toggleBlockType(type);
-    this.toggleInlineStyle = style => this._toggleInlineStyle(style);
-    this.onTab = e => this._onTab(e);
-    this.onReturn = e => this._onReturn(e);
-  }
-
-  _handleKeyCommand(command) {
+  handleKeyCommand = command => {
     const { editorState } = this.state;
     let newState;
 
@@ -87,9 +82,9 @@ class PrismEditorExample extends Component {
       return true;
     }
     return false;
-  }
+  };
 
-  _keyBindingFn(e) {
+  keyBindingFn = e => {
     let editorState = this.state.editorState;
     let command;
 
@@ -101,19 +96,9 @@ class PrismEditorExample extends Component {
     }
 
     return Draft.getDefaultKeyBinding(e);
-  }
+  };
 
-  _toggleBlockType(blockType) {
-    this.onChange(RichUtils.toggleBlockType(this.state.editorState, blockType));
-  }
-
-  _toggleInlineStyle(inlineStyle) {
-    this.onChange(
-      RichUtils.toggleInlineStyle(this.state.editorState, inlineStyle)
-    );
-  }
-
-  _onTab(e) {
+  onTab = e => {
     let editorState = this.state.editorState;
 
     if (!CodeUtils.hasSelectionInBlock(editorState)) {
@@ -121,9 +106,9 @@ class PrismEditorExample extends Component {
     }
 
     this.onChange(CodeUtils.onTab(e, editorState));
-  }
+  };
 
-  _onReturn(e) {
+  onReturn = e => {
     let editorState = this.state.editorState;
 
     if (!CodeUtils.hasSelectionInBlock(editorState)) {
@@ -132,7 +117,7 @@ class PrismEditorExample extends Component {
 
     this.onChange(CodeUtils.handleReturn(e, editorState));
     return true;
-  }
+  };
 
   render() {
     const { placeholder, error, info } = this.props;
@@ -144,15 +129,15 @@ class PrismEditorExample extends Component {
           <div className="RichEditor-root">
             <div className="RichEditor-editor" onClick={this.focus}>
               <Editor
-                editorState={editorState}
-                handleKeyCommand={this.handleKeyCommand}
-                keyBindingFn={this.keyBindingFn}
-                onChange={this.onChange}
-                placeholder={placeholder}
                 ref="editor"
                 spellCheck={true}
-                handleReturn={this.onReturn}
                 onTab={this.onTab}
+                editorState={editorState}
+                onChange={this.onChange}
+                placeholder={placeholder}
+                handleReturn={this.onReturn}
+                keyBindingFn={this.keyBindingFn}
+                handleKeyCommand={this.handleKeyCommand}
               />
             </div>
           </div>
@@ -164,4 +149,4 @@ class PrismEditorExample extends Component {
   }
 }
 
-export default PrismEditorExample;
+export default CodeInputArea;

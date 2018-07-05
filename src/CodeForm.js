@@ -62,7 +62,6 @@ class CodeForm extends Component {
           info="Add your component code"
         />
         <CodeInputArea
-          name="code"
           placeholder="* Component Code"
           codeValue={this.codeValue}
           error={errors.code}
