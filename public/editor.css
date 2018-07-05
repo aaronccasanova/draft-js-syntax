@@ -4,7 +4,7 @@ body {
 
 .RichEditor-root {
   /* ---------For Editing Layout---------- */
-  border: 2px solid blue;
+  /* border: 2px solid blue; */
   /* ------------------------------------- */
   /* backg
   round: #fff; */
@@ -19,14 +19,14 @@ body {
   /* margin-top: 10px; */
   /* ------------------------------------------------------ */
   /* ---------For Editing Layout---------- */
-  border: 2px solid red;
+  /* border: 2px solid red; */
   /* ------------------------------------- */
   cursor: text;
   font-size: 16px;
   background-color: #f9f9f9;
-  /* font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace; */
-  /* font-size: 16px; */
-  /* padding: 20px; */
+  font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
+  font-size: 16px;
+  padding: 20px;
   margin: 0;
 }
 
