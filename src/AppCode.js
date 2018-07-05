@@ -8,6 +8,11 @@ import Draft, {
 import PrismDraftDecorator from 'draft-js-prism';
 import CodeUtils from 'draft-js-code';
 
+// const { Editor, EditorState, RichUtils, convertFromRaw } = Draft;
+
+var FIRST_CODE =
+  'var message = "Hello World"\n    + "with four spaces indentation"\n\nconsole.log(message);';
+
 class PrismEditorExample extends Component {
   constructor(props) {
     super(props);
@@ -18,8 +23,7 @@ class PrismEditorExample extends Component {
       blocks: [
         {
           type: 'code-block',
-          // text: ''
-          text: 'var message = "This is awersome!";'
+          text: FIRST_CODE
         }
       ]
     });
@@ -51,9 +55,7 @@ class PrismEditorExample extends Component {
       newState = RichUtils.handleKeyCommand(editorState, command);
     }
 
-    // add && newState.length > 0 to check if there is any content in the editor
-    // previous functionality would delete the syntax highlighted editor, which would not re-render without a page refresh
-    if (newState && newState.length > 0) {
+    if (newState) {
       this.onChange(newState);
       return true;
     }
@@ -108,10 +110,35 @@ class PrismEditorExample extends Component {
   render() {
     const { editorState } = this.state;
 
+    // If the user changes block type before entering any text, we can
+    // either style the placeholder or hide it. Let's just hide it now.
+    let className = 'RichEditor-editor';
+    var contentState = editorState.getCurrentContent();
+    if (!contentState.hasText()) {
+      if (
+        contentState
+          .getBlockMap()
+          .first()
+          .getType() !== 'unstyled'
+      ) {
+        className += ' RichEditor-hidePlaceholder';
+      }
+    }
+
     return (
       <div className="RichEditor-root">
-        <div className="RichEditor-editor" onClick={this.focus}>
+        {/* <BlockStyleControls
+          editorState={editorState}
+          onToggle={this.toggleBlockType}
+        />
+        <InlineStyleControls
+          editorState={editorState}
+          onToggle={this.toggleInlineStyle}
+        /> */}
+        <div className={className} onClick={this.focus}>
           <Editor
+            blockStyleFn={getBlockStyle}
+            customStyleMap={styleMap}
             editorState={editorState}
             handleKeyCommand={this.handleKeyCommand}
             keyBindingFn={this.keyBindingFn}
@@ -129,3 +156,22 @@ class PrismEditorExample extends Component {
 }
 
 export default PrismEditorExample;
+
+// Custom overrides for "code" style.
+const styleMap = {
+  CODE: {
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
+    fontSize: 16,
+    padding: 2
+  }
+};
+
+function getBlockStyle(block) {
+  switch (block.getType()) {
+    case 'blockquote':
+      return 'RichEditor-blockquote';
+    default:
+      return null;
+  }
+}
