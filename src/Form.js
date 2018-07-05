@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
 
 class Form extends Component {
   state = {
@@ -31,5 +29,3 @@ class Form extends Component {
 }
 
 export default Form;
-
-ReactDOM.render(<Form />, document.getElementById('root'));

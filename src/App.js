@@ -3,7 +3,8 @@ import Draft, {
   Editor,
   EditorState,
   RichUtils,
-  convertFromRaw
+  convertFromRaw,
+  convertToRaw
 } from 'draft-js';
 import PrismDraftDecorator from 'draft-js-prism';
 import CodeUtils from 'draft-js-code';
@@ -29,7 +30,9 @@ class PrismEditorExample extends Component {
     };
 
     this.focus = () => this.refs.editor.focus();
-    this.onChange = editorState => this.setState({ editorState });
+    this.onChange = editorState => {
+      this.setState({ editorState });
+    };
 
     this.handleKeyCommand = command => this._handleKeyCommand(command);
     this.keyBindingFn = e => this._keyBindingFn(e);
@@ -107,23 +110,29 @@ class PrismEditorExample extends Component {
 
   render() {
     const { editorState } = this.state;
+    const contentState = editorState.getCurrentContent();
+    const stringContent = convertToRaw(contentState).blocks[0].text;
+    // console.log(stringContent);
 
     return (
-      <div className="RichEditor-root">
-        <div className="RichEditor-editor" onClick={this.focus}>
-          <Editor
-            editorState={editorState}
-            handleKeyCommand={this.handleKeyCommand}
-            keyBindingFn={this.keyBindingFn}
-            onChange={this.onChange}
-            placeholder="Tell a story..."
-            ref="editor"
-            spellCheck={true}
-            handleReturn={this.onReturn}
-            onTab={this.onTab}
-          />
+      <React.Fragment>
+        {this.props.render(stringContent)}
+        <div className="RichEditor-root">
+          <div className="RichEditor-editor" onClick={this.focus}>
+            <Editor
+              editorState={editorState}
+              handleKeyCommand={this.handleKeyCommand}
+              keyBindingFn={this.keyBindingFn}
+              onChange={this.onChange}
+              placeholder="Tell a story..."
+              ref="editor"
+              spellCheck={true}
+              handleReturn={this.onReturn}
+              onTab={this.onTab}
+            />
+          </div>
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }
